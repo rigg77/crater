@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
-      - ./:/var/www
+      - crater-data:/var/www
       - ./docker-compose/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:rw,delegated
     networks:
       - crater
@@ -21,7 +21,7 @@ services:
     image: mariadb
     restart: always
     volumes:
-      - db:/var/lib/mysql
+      - crater-db:/var/lib/mysql
       # If you want to persist data on the host, comment the line above this one...
       # and uncomment the line under this one.
       #- ./docker-compose/db/data:/var/lib/mysql:rw,delegated
@@ -41,7 +41,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./:/var/www
+      - crater-data:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
     networks:
       - crater
@@ -51,12 +51,13 @@ services:
       context: ./
       dockerfile: ./docker-compose/cron.dockerfile
     volumes:
-      - ./:/var/www
+      - crater-data:/var/www
     networks:
       - crater
 
 volumes:
-  db:
+  crater-data:
+  crater-db:
 
 networks:
   crater:
